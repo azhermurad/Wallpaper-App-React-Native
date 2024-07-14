@@ -9,3 +9,4 @@ export const hp = (number: number) => {
     return height * (number / 100);
 };
 
+
