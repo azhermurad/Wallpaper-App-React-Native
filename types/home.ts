@@ -1,0 +1,3 @@
+interface imageData {
+    id: number;
+}
