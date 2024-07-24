@@ -12,9 +12,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { hp, wp } from '../util/responseUnit';
 import Header from '../components/home/Header';
 import SearchInput from '../components/SearchInput';
-import { useEffect, useRef, useState } from 'react';
-import Catagory from '../components/Catagory';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Catagory, { DATA } from '../components/Catagory';
 import MasonaryList from '../components/MasonaryList';
+import _ from 'lodash';
+import { useRouter } from 'expo-router';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import BottomSheetModel from '../components/models/BottomSheetModel';
 
 export interface ImageReturn {
     id: string;
@@ -25,44 +29,70 @@ export interface ImageReturn {
     height: number;
 }
 
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 const HomeScreen = () => {
+    const router = useRouter();
     const [searchQuery, setSearchQuery] = useState('');
     const [isloading, setLoading] = useState(false);
     const searchInputRef = useRef<TextInput>(null);
     const [refreshing, setRefreshing] = useState(false);
     const [images, setImages] = useState<ImageReturn[] | null>(null);
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
     const [nextPage, setNextPage] = useState(
-        'https://api.pexels.com/v1/search?query=nature&per_page=15'
+        'https://api.pexels.com/v1/search?query=nature'
     );
 
     const clearQuery = () => {
         setSearchQuery('');
     };
-    // FETCHING IMAGES FROM
+    const functionDebounce = useCallback(
+        _.debounce((url) => FetchImages(url, true), 500),
+        []
+    );
+
     useEffect(() => {
-        FetchImages();
+        const queryUrl = `${BASE_URL}?query=${searchQuery}`;
+        console.log(queryUrl, 'queryurl for fetch the mimage for the server');
+
+        if (searchQuery) {
+            functionDebounce(queryUrl);
+            return;
+        }
+        console.log('hello');
+        FetchImages(`${BASE_URL}?query=nature`, true);
+    }, [searchQuery]);
+
+    // categoryHander
+    const categoryHander = useCallback((activeCategory: null | string) => {
+        console.log(activeCategory, 'hellof');
+        const query = activeCategory ? activeCategory : 'nature';
+        FetchImages(`${BASE_URL}?query=${query}`, true);
     }, []);
 
+    // on Pull refresh data
     const onRefresh = async () => {
-        console.log('called');
         setRefreshing(true);
-        // fetch data
-        await FetchImages();
+        await FetchImages(nextPage);
         setRefreshing(false);
     };
-
-    async function FetchImages() {
+    // fetchImage login
+    async function FetchImages(url: string, search: boolean = false) {
+        console.log(url);
         if (isloading) return; // this will stop to call on on
         try {
             console.log('fetchimage is calling');
             setLoading(true);
-            const respose = await axios.get(nextPage, {
+            const respose = await axios.get(url, {
                 headers: {
                     Authorization: process.env.EXPO_PUBLIC_API_KEY,
                 },
             });
             setImages((pre) => {
                 if (!pre) {
+                    return [...respose.data.photos];
+                }
+                if (search) {
                     return [...respose.data.photos];
                 }
                 return [...pre, ...respose.data.photos];
@@ -74,9 +104,19 @@ const HomeScreen = () => {
             setLoading(false);
         }
     }
+
+    const filterHandler = useCallback((search: string) => {
+        // Close the bottom sheet modal
+        if (bottomSheetModalRef.current) {
+            bottomSheetModalRef.current.close();
+        }
+
+        FetchImages(`${BASE_URL}?query=all&${search}`, true);
+    }, []);
+
     return (
         <SafeAreaView style={styles.container}>
-            <Header />
+            <Header bottomSheetModalRef={bottomSheetModalRef} />
 
             <ScrollView
                 showsVerticalScrollIndicator={false}
@@ -99,7 +139,7 @@ const HomeScreen = () => {
                         event.nativeEvent.contentSize.height;
 
                     if (isAtAnd) {
-                        FetchImages();
+                        FetchImages(nextPage);
                         return;
                     }
                 }}
@@ -113,7 +153,7 @@ const HomeScreen = () => {
                     ref={searchInputRef}
                 />
                 <View style={styles.horizontalSpace}>
-                    <Catagory />
+                    <Catagory categoryHander={categoryHander} />
                 </View>
                 <View>
                     {images && (
@@ -121,6 +161,10 @@ const HomeScreen = () => {
                     )}
                 </View>
             </ScrollView>
+            <BottomSheetModel
+                bottomSheetModalRef={bottomSheetModalRef}
+                filterHandler={filterHandler}
+            />
         </SafeAreaView>
     );
 };

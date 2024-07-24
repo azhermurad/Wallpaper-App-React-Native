@@ -1,17 +1,29 @@
-import { View, Text, FlatList, StyleSheet, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet } from 'react-native';
+import React, { FC, useCallback, useState } from 'react';
 import { wp } from '../util/responseUnit';
 import CatagoryItem from './CategoryItem';
 
-const DATA = ['Nature', 'Ocean', 'Tigers', 'Computer', 'Pears', 'Montains'];
+export const DATA = [
+    'Nature',
+    'Ocean',
+    'Tigers',
+    'Computer',
+    'Pears',
+    'Montains',
+];
+interface ICatagory {
+    categoryHander(activeCategory: string | null): void;
+}
 
 // nVLKnD8axHxA5eGQwIlsHbIdMyQFHoRiOB9ddItisSMk4Vt1VYqjxLIL
-const Catagory = () => {
-    const [activeCategory, setCategory] = useState<number | null>(null);
+const Catagory: FC<ICatagory> = ({ categoryHander }) => {
+    const [activeCategory, setCategory] = useState<string | null>(null);
 
-    const handleActiveCategoy = (index: number) => {
-        setCategory(index);
-    };
+    const handleActiveCategoy = useCallback((title: string) => {
+        console.log(title);
+        setCategory(title);
+        categoryHander(title);
+    }, []);
 
     return (
         <FlatList

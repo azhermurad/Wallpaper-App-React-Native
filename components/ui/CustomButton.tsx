@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import { hp } from '@/util/responseUnit';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants';
 
 type IPrpos = {
     title: string;
@@ -31,7 +31,7 @@ const CustomButton = ({
     backgroundColor = 'orange',
 }: IPrpos) => {
     return (
-        <View style={styles.button}> 
+        <View style={styles.button}>
             <TouchableOpacity
                 style={{
                     paddingVertical: 10,
@@ -66,10 +66,9 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 30,
         overflow: 'hidden',
-        elevation:3,
-        borderWidth:4,
-        borderColor:Colors.skyBlue100
-
+        elevation: 3,
+        // borderWidth: 4,
+        // borderColor: Colors.skyBlue100,
     },
     text: {
         color: '#FFFFFF',

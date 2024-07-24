@@ -1,19 +1,24 @@
 import { Text, StyleSheet, Pressable, View } from 'react-native';
-import { wp } from '../util/responseUnit';
 import Animated, { FadeInRight } from 'react-native-reanimated';
+import { wp } from '../../util/responseUnit';
+import { FilterData } from './FilterView';
 
 interface ICatagoryItem {
     title: string;
-    handleActiveCategoy(title: string | null): void;
+    handleActiveCategoy(headerTitle: string, title: string): void;
     index: number;
-    activeCategory: null | string;
+    filterData: FilterData | any;
+    headerTitle: string;
+    resetFilterData(data?: FilterData): void;
 }
 
-const CatagoryItem = ({
+const FilterItem = ({
     title,
     handleActiveCategoy,
     index,
-    activeCategory,
+    filterData,
+    headerTitle,
+    resetFilterData,
 }: ICatagoryItem): React.JSX.Element => {
     return (
         <Animated.View
@@ -26,18 +31,31 @@ const CatagoryItem = ({
                     styles.itemConatiner,
                     {
                         backgroundColor:
-                            activeCategory !== title ? 'transparent' : 'black',
+                            filterData[headerTitle]?.title !== title
+                                ? 'transparent'
+                                : 'black',
                     },
                 ]}
                 onPress={() => {
-                    handleActiveCategoy(activeCategory == title ? null : title);
+                    // handleActiveCategoy(activeCategory == title ? null : title);
+                    console.log(filterData[headerTitle]?.title == title);
+                    if (filterData[headerTitle]?.title == title) {
+                        delete filterData[headerTitle];
+                        resetFilterData(filterData);
+                        return;
+                    }
+
+                    handleActiveCategoy(headerTitle, title);
                 }}
             >
                 <Text
                     style={[
                         styles.itemTitle,
                         {
-                            color: activeCategory !== title ? 'black' : 'white',
+                            color:
+                                filterData[headerTitle]?.title !== title
+                                    ? 'black'
+                                    : 'white',
                         },
                     ]}
                 >
@@ -47,20 +65,21 @@ const CatagoryItem = ({
         </Animated.View>
     );
 };
-export default CatagoryItem;
+export default FilterItem;
 
 const styles = StyleSheet.create({
     itemConatiner: {
         padding: wp(3),
         borderWidth: 1,
         borderColor: 'black',
-        borderRadius: wp(5),
+        borderRadius: wp(1),
         alignItems: 'center',
         justifyContent: 'center',
     },
     itemTitle: {
         color: 'black',
         fontWeight: 'bold',
+        fontSize: wp(3),
     },
     pressed: { opacity: 0.5 },
 });

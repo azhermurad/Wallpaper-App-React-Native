@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import CustomButton from './ui/CustomButton';
 import { hp } from '@/util/responseUnit';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants';
 import { router } from 'expo-router';
 
 const Intro = () => {

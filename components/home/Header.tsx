@@ -1,8 +1,15 @@
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { hp, wp } from '../../util/responseUnit';
-
-const Header = () => {
+import { FC, forwardRef, useCallback } from 'react';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+interface IHeader {
+    bottomSheetModalRef: React.RefObject<BottomSheetModal>;
+}
+const Header: FC<IHeader> = ({ bottomSheetModalRef }) => {
+    const handlePresentModalPress = useCallback(() => {
+        bottomSheetModalRef.current?.present();
+    }, []);
     return (
         <>
             <View style={styles.container}>
@@ -13,7 +20,10 @@ const Header = () => {
                 >
                     <Text style={styles.title}>Company</Text>
                 </Pressable>
-                <Pressable android_ripple={{ color: 'tranparenet' }}>
+                <Pressable
+                    android_ripple={{ color: 'tranparenet' }}
+                    onPress={handlePresentModalPress}
+                >
                     <Ionicons name='filter' size={30} color='black' />
                 </Pressable>
             </View>
