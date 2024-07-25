@@ -1,10 +1,8 @@
 import {
     View,
-    Text,
     StyleSheet,
     ScrollView,
     TextInput,
-    Image,
     RefreshControl,
 } from 'react-native';
 import axios from 'axios';
@@ -13,7 +11,7 @@ import { hp, wp } from '../util/responseUnit';
 import Header from '../components/home/Header';
 import SearchInput from '../components/SearchInput';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Catagory, { DATA } from '../components/Catagory';
+import Catagory from '../components/Catagory';
 import MasonaryList from '../components/MasonaryList';
 import _ from 'lodash';
 import { useRouter } from 'expo-router';
@@ -106,7 +104,6 @@ const HomeScreen = () => {
     }
 
     const filterHandler = useCallback((search: string) => {
-        // Close the bottom sheet modal
         if (bottomSheetModalRef.current) {
             bottomSheetModalRef.current.close();
         }
