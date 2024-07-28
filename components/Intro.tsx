@@ -1,19 +1,21 @@
-import { Dimensions, ImageBackground } from 'react-native';
+import { Dimensions, ImageBackground, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import CustomButton from './ui/CustomButton';
-import { hp } from '@/util/responseUnit';
+import { hp, wp } from '@/util/responseUnit';
 import { Colors } from '@/constants';
 import { router } from 'expo-router';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const Intro = () => {
-    const { width, height } = Dimensions.get('screen');
+    const { width } = Dimensions.get('window');
+    const insets = useSafeAreaInsets();
+    console.log(insets);
     return (
         <ImageBackground
             source={require('../assets/images/into.jpg')}
             style={{
                 width: width,
-                height: height,
+                height: '100%',
             }}
             resizeMode='cover'
         >
@@ -21,7 +23,7 @@ const Intro = () => {
                 // Button Linear Gradient
                 style={{
                     width: width,
-                    height: height,
+                    height: '100%',
                     position: 'relative',
                     alignItems: 'center',
                     justifyContent: 'flex-end',
@@ -30,25 +32,30 @@ const Intro = () => {
                 start={{ x: 0.1, y: 0.2 }}
                 end={{ x: 0.1, y: 0.9 }}
             >
-                <Animated.View
-                    entering={FadeInDown.duration(100).springify().damping(20)}
+                <View
                     style={{
+                        width: wp(90),
                         position: 'absolute',
-                        width: '90%',
-                        bottom: hp(5),
+                        borderWidth: 2,
+                        borderColor: 'transparent', // Making the border transparent
+                        bottom: hp(10),
                     }}
                 >
-                    <CustomButton
-                        backgroundColor={Colors.skyBlue200}
-                        onpress={() => {
-                            router.push({
-                                pathname: '/home',
-                                params: { id: 'azher' },
-                            });
-                        }}
-                        title="let's explorer"
-                    />
-                </Animated.View>
+                    <Animated.View
+                        entering={FadeInDown.duration(300).springify()}
+                    >
+                        <CustomButton
+                            backgroundColor={Colors.skyBlue200}
+                            onpress={() => {
+                                router.push({
+                                    pathname: '/home',
+                                    params: { id: 'azher' },
+                                });
+                            }}
+                            title="let's explorer"
+                        />
+                    </Animated.View>
+                </View>
             </LinearGradient>
         </ImageBackground>
     );

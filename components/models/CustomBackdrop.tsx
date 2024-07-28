@@ -31,6 +31,7 @@ const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
                 intensity={30}
                 tint='dark'
                 // tint='light'
+
                 style={[StyleSheet.absoluteFill]}
                 experimentalBlurMethod='dimezisBlurView'
             ></BlurView>

@@ -1,7 +1,6 @@
 import { Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Intro from '@/components/Intro';
-import Splach from '../components/Splach';
 
 const index = () => {
     return (

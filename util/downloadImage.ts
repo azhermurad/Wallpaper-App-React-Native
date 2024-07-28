@@ -14,11 +14,10 @@ const downloadImage = async ({
     setImageUri,
     permissionResponse,
     requestPermission,
-    imageUrl,
+    imageUrl: url,
 }: DownloadImageFunctionProps) => {
     try {
-        const imageUrl =
-            'https://images.pexels.com/photos/2880507/pexels-photo-2880507.jpeg'; // Replace with your image URL
+        const imageUrl = url; // Replace with your image URL
         const fileUri = FileSystem.documentDirectory + 'image.jpeg';
 
         // Create a download resumable object

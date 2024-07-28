@@ -28,9 +28,14 @@ const MainLayout = () => {
             setAnimationFinish(true);
         }
     }, []);
-    if (!appIsReady || !animaationFinish) {
-        console.log('application is not ready');
-        return <Splach onFinish={handleSplashFinish} />;
+
+    // if (!appIsReady || !animaationFinish) {
+    //     console.log('application is not ready');
+    //     return <Splach onFinish={handleSplashFinish} />;
+    // }
+
+    if (!appIsReady) {
+        return null;
     }
 
     return (
@@ -50,6 +55,14 @@ const MainLayout = () => {
                         // Set the presentation mode to modal for our modal route.
                         headerShown: false,
                         presentation: 'modal',
+                    }}
+                />
+                <Stack.Screen
+                    name='imageDetail'
+                    options={{
+                        // Set the presentation mode to modal for our modal route.
+                        headerShown: false,
+                        presentation: 'transparentModal',
                     }}
                 />
             </Stack>

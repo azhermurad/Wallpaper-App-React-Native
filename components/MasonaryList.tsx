@@ -4,6 +4,7 @@ import {
     Dimensions,
     View,
     Text,
+    Pressable,
 } from 'react-native';
 import React from 'react';
 import { MasonryFlashList } from '@shopify/flash-list';
@@ -12,19 +13,32 @@ import { ImageReturn } from '../app/home';
 import { wp } from '../util/responseUnit';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import Feather from '@expo/vector-icons/Feather';
+import { useRouter } from 'expo-router';
 
 interface IMasonaryP {
     image: ImageReturn[] | null;
     isLoading: boolean;
 }
+
+export interface DetailImage {
+    height: number;
+    id: string;
+    photographer_url: string;
+    src: {
+        large: string;
+    };
+    width: string;
+}
 const WIDTH = Dimensions.get('window').width / 2 - 5;
 
-const calculateHeight = (width: any, height: any) => {
+export const calculateHeight = (width: any, height: any) => {
     const aspectRatio = height / width;
     return WIDTH * aspectRatio;
 };
 
 const MasonaryList: React.FC<IMasonaryP> = ({ image, isLoading }) => {
+    const router = useRouter();
+
     const renderFooter = () => {
         if (!isLoading) return null;
         return <ActivityIndicator style={{ margin: 10 }} />;
@@ -64,32 +78,45 @@ const MasonaryList: React.FC<IMasonaryP> = ({ image, isLoading }) => {
                         <View
                             style={{
                                 position: 'absolute',
-                                right: -2,
-                                top: -2,
+                                right: 7,
+                                top: 7,
                                 height: 30,
                                 width: 30,
-                                zIndex: 10,
+                                zIndex: 1,
                                 backgroundColor: 'black',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                borderBottomLeftRadius: 10,
+                                borderRadius: 30,
+                                elevation: 4,
                             }}
                         >
-                            <Feather name='heart' size={20} color='white' />
+                            <Feather name='heart' size={18} color='white' />
                         </View>
-                        <Image
-                            style={[
-                                styles.imageStyle,
-                                {
-                                    height: calculateHeight(
-                                        item.width,
-                                        item.height
-                                    ),
-                                },
-                            ]}
-                            source={item.src.large}
-                            contentFit='cover'
-                        />
+                        <Pressable
+                            onPress={() => {
+                                router.push({
+                                    pathname: 'imageDetail',
+                                    params: {
+                                        ...item,
+                                        src: item.src.large,
+                                    } as any,
+                                });
+                            }}
+                        >
+                            <Image
+                                style={[
+                                    styles.imageStyle,
+                                    {
+                                        height: calculateHeight(
+                                            item.width,
+                                            item.height
+                                        ),
+                                    },
+                                ]}
+                                source={item.src.large}
+                                contentFit='cover'
+                            />
+                        </Pressable>
                     </Animated.View>
                 );
             }}
