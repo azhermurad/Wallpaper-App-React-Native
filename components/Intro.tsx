@@ -48,7 +48,7 @@ const Intro = () => {
                             backgroundColor={Colors.skyBlue200}
                             onpress={() => {
                                 router.push({
-                                    pathname: '/home',
+                                    pathname: '/login',
                                     params: { id: 'azher' },
                                 });
                             }}

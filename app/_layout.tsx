@@ -65,6 +65,14 @@ const MainLayout = () => {
                         presentation: 'transparentModal',
                     }}
                 />
+
+                <Stack.Screen
+                    name='login'
+                    options={{
+                        // Set the presentation mode to modal for our modal route.
+                        headerShown: false,
+                    }}
+                />
             </Stack>
             {/* content */}
         </GestureHandlerRootView>

@@ -1,22 +1,15 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    Button,
-    TouchableOpacity,
-    Share,
-    Alert,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Share } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { hp, wp } from '../util/responseUnit';
 import { Image } from 'expo-image';
 import { AntDesign } from '@expo/vector-icons';
 import * as MediaLibrary from 'expo-media-library';
-import * as Linking from 'expo-linking';
+import Toast from 'react-native-toast-message';
+import { EvilIcons } from '@expo/vector-icons';
+
 import downloadImage, {
     DownloadImageFunctionProps,
 } from '../util/downloadImage';
@@ -64,18 +57,23 @@ const imageDetail = () => {
         }
     };
 
-    const openLocalImage = async () => {
+    useEffect(() => {
         if (imageUri) {
-            // Use Linking to open the image in the default viewer
-            const supported = await Linking.canOpenURL(imageUri);
-            if (supported) {
-                await Linking.openURL(imageUri);
-            } else {
-                Alert.alert('Error', 'Cannot open this file!');
-            }
+            Toast.show({
+                type: 'success',
+                text1: 'Download Successfully!!!',
+            });
         }
-    };
+    }, [imageUri]);
+    // create completely new type :)
 
+    const toastConfig = {
+        success: ({ text1, props }: any) => (
+            <View style={styles.toast}>
+                <Text style={styles.toastText}>{text1}</Text>
+            </View>
+        ),
+    };
     return (
         <Animated.View
             style={styles.container}
@@ -100,6 +98,7 @@ const imageDetail = () => {
                 />
                 <View style={styles.controlBox}>
                     <TouchableOpacity
+                        style={styles.icon}
                         onPress={() => {
                             downloadImageHandler(params.src as string);
                         }}
@@ -110,8 +109,19 @@ const imageDetail = () => {
                             color='white'
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={shareHandler}>
+                    <TouchableOpacity
+                        onPress={shareHandler}
+                        style={styles.icon}
+                    >
                         <AntDesign name='sharealt' size={25} color='white' />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            router.back();
+                        }}
+                        style={styles.icon}
+                    >
+                        <EvilIcons name='close' size={25} color='white' />
                     </TouchableOpacity>
                 </View>
                 {downloadProgress > 0 && downloadProgress < 1 && (
@@ -119,14 +129,8 @@ const imageDetail = () => {
                         Downloading: {(downloadProgress * 100).toFixed(2)}%
                     </Text>
                 )}
-                {imageUri && (
-                    <TouchableOpacity onPress={openLocalImage}>
-                        <Text style={{ color: 'white' }}>
-                            Image Downloaded!!!
-                        </Text>
-                    </TouchableOpacity>
-                )}
             </BlurView>
+            <Toast config={toastConfig} position='bottom' bottomOffset={20} />
         </Animated.View>
     );
 };
@@ -150,7 +154,22 @@ const styles = StyleSheet.create({
     controlBox: {
         marginVertical: hp(3),
         flexDirection: 'row',
-        columnGap: 10,
+        columnGap: wp(5),
+    },
+    icon: {
+        borderWidth: 1,
+        padding: 4,
+        backgroundColor: 'gray',
+        borderRadius: 4,
+    },
+    toast: {
+        backgroundColor: 'gray',
+        padding: 10,
+        borderRadius: 10,
+    },
+    toastText: {
+        fontWeight: 'bold',
+        color: 'white',
     },
 });
 export default imageDetail;
