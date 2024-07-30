@@ -8,16 +8,16 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { hp, wp } from '../util/responseUnit';
-import Header from '../components/home/Header';
-import SearchInput from '../components/SearchInput';
+import { hp, wp } from '../../util/responseUnit';
+import Header from '../../components/home/Header';
+import SearchInput from '../../components/SearchInput';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Catagory from '../components/Catagory';
-import MasonaryList from '../components/MasonaryList';
+import Catagory from '../../components/Catagory';
+import MasonaryList from '../../components/MasonaryList';
 import _ from 'lodash';
 import { useRouter } from 'expo-router';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
-import BottomSheetModel from '../components/models/BottomSheetModel';
+import BottomSheetModel from '../../components/models/BottomSheetModel';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Entypo } from '@expo/vector-icons';
 

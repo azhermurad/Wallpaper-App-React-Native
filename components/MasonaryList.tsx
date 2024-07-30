@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import { MasonryFlashList } from '@shopify/flash-list';
 import { Image } from 'expo-image';
-import { ImageReturn } from '../app/home';
+import { ImageReturn } from '../app/(app)/home';
 import { wp } from '../util/responseUnit';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import Feather from '@expo/vector-icons/Feather';

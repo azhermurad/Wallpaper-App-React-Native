@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import Animated, { FadeIn } from 'react-native-reanimated';
-import { hp, wp } from '../util/responseUnit';
+import { hp, wp } from '../../util/responseUnit';
 import { Image } from 'expo-image';
 import { AntDesign } from '@expo/vector-icons';
 import * as MediaLibrary from 'expo-media-library';
@@ -12,7 +12,7 @@ import { EvilIcons } from '@expo/vector-icons';
 
 import downloadImage, {
     DownloadImageFunctionProps,
-} from '../util/downloadImage';
+} from '../../util/downloadImage';
 
 const imageDetail = () => {
     const params = useLocalSearchParams();

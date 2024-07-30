@@ -1,3 +1,0 @@
-interface imageData {
-    id: number;
-}
