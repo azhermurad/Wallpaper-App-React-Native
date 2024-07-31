@@ -7,9 +7,12 @@ import Feather from '@expo/vector-icons/Feather';
 }
 
 interface InputFieldProps {
+    name: string;
     iconName: string;
     placeholder: string;
+    value: string;
     secureTextEntry: boolean;
+    valueHandler(value: string, name: string): void;
 }
 
 const icons: any = {
@@ -17,15 +20,25 @@ const icons: any = {
     lock: <Feather name='lock' size={24} color='#ccc' />,
 };
 const InputField = (
-    { placeholder, secureTextEntry, iconName }: InputFieldProps,
+    {
+        placeholder,
+        secureTextEntry,
+        iconName,
+        value,
+        valueHandler,
+        name,
+    }: InputFieldProps,
     ref: Ref<TextInput>
 ) => {
-    let icon: React.JSX.Element;
     return (
         <View style={styles.container}>
             <View style={styles.textInputContainer}>
                 {icons[iconName]}
                 <TextInput
+                    onChangeText={(value) => {
+                        valueHandler(value, name);
+                    }}
+                    value={value}
                     ref={ref}
                     placeholder={placeholder}
                     style={styles.email}

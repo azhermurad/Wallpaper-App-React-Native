@@ -1,21 +1,36 @@
 import {
     View,
-    Text,
     StyleSheet,
     Dimensions,
     Button,
     TextInput,
+    Text,
 } from 'react-native';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { hp } from '../util/responseUnit';
 import InputField from '../components/InputField';
 import CustomButton from '../components/ui/CustomButton';
+import { useAuth } from '../context/AuthProvider';
+import { auth } from '../firebaseConfig';
 
 const login = () => {
-    const emailRef = useRef<TextInput>(null);
-    console.log(emailRef);
+    const [formdata, setFormData] = useState({
+        email: '',
+        password: '',
+    });
 
+    const { signIn, signUp } = useAuth();
+    const loginHandler = () => {
+        signIn({ email: formdata.email, password: formdata.password });
+    };
+
+    const valueHandler = (value: string, name: string) => {
+        console.log(value, name);
+        setFormData((pre) => {
+            return { ...pre, [name]: value } as any;
+        });
+    };
     return (
         <View style={styles.container}>
             <View style={styles.box}>
@@ -44,23 +59,38 @@ const login = () => {
                 }}
             >
                 <InputField
+                    name='email'
+                    valueHandler={valueHandler}
+                    value={formdata.email}
                     iconName='email'
                     secureTextEntry={false}
-                    ref={emailRef}
                     placeholder='Enter your email'
                 />
                 <InputField
+                    name='password'
+                    valueHandler={valueHandler}
+                    value={formdata.password}
                     iconName='lock'
                     secureTextEntry={true}
-                    ref={emailRef}
-                    placeholder='Enter your email'
+                    placeholder='Enter your Password'
                 />
                 <View style={styles.buttonContiner}>
                     <CustomButton
-                        title='Login'
-                        backgroundColor='#454547'
-                        onpress={() => {}}
+                        title='login'
+                        onpress={loginHandler}
+                        backgroundColor='#2F2F31'
+                        IconShow={false}
                     />
+                    {/* <Button title='signup' onPress={loginHandler} /> */}
+                </View>
+                <View
+                    style={{
+                        borderWidth: 1,
+                        marginVertical: 10,
+                        alignItems: 'flex-end',
+                    }}
+                >
+                    <Text>already account</Text>
                 </View>
             </View>
         </View>

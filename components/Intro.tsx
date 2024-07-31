@@ -45,7 +45,7 @@ const Intro = () => {
                         entering={FadeInDown.duration(300).springify()}
                     >
                         <CustomButton
-                            backgroundColor={Colors.skyBlue200}
+                            backgroundColor='#2F2F31'
                             onpress={() => {
                                 router.push({
                                     pathname: '/login',
