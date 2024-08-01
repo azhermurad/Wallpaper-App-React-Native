@@ -5,6 +5,7 @@ import {
     Button,
     TextInput,
     Text,
+    TouchableOpacity,
 } from 'react-native';
 import React, { useRef, useState } from 'react';
 import Svg, { Path } from 'react-native-svg';
@@ -12,23 +13,41 @@ import { hp } from '../util/responseUnit';
 import InputField from '../components/InputField';
 import CustomButton from '../components/ui/CustomButton';
 import { useAuth } from '../context/AuthProvider';
-import { auth } from '../firebaseConfig';
+import { Image } from 'expo-image';
 
 const login = () => {
+    const [loginScreen, setLoginScreen] = useState(false);
     const [formdata, setFormData] = useState({
-        email: '',
-        password: '',
+        name: 'test',
+        email: 'azhermurad@gmail.com',
+        password: 'azherali',
     });
 
     const { signIn, signUp } = useAuth();
     const loginHandler = () => {
-        signIn({ email: formdata.email, password: formdata.password });
+        if (loginScreen) {
+            signIn({ email: formdata.email, password: formdata.password });
+        } else {
+            signUp({
+                email: formdata.email,
+                password: formdata.password,
+                name: formdata.name,
+            });
+        }
     };
 
     const valueHandler = (value: string, name: string) => {
         console.log(value, name);
         setFormData((pre) => {
             return { ...pre, [name]: value } as any;
+        });
+    };
+    const switchScreenHandler = () => {
+        setLoginScreen((pre) => !pre);
+        setFormData({
+            name: '',
+            email: '',
+            password: '',
         });
     };
     return (
@@ -58,6 +77,21 @@ const login = () => {
                     padding: 10,
                 }}
             >
+                <Image
+                    style={[styles.imageStyle]}
+                    source={require('../assets/images/login.png')}
+                    contentFit='cover'
+                />
+                {!loginScreen && (
+                    <InputField
+                        name='name'
+                        valueHandler={valueHandler}
+                        value={formdata.name}
+                        iconName='users'
+                        placeholder='Enter your Name'
+                    />
+                )}
+
                 <InputField
                     name='email'
                     valueHandler={valueHandler}
@@ -74,9 +108,10 @@ const login = () => {
                     secureTextEntry={true}
                     placeholder='Enter your Password'
                 />
+
                 <View style={styles.buttonContiner}>
                     <CustomButton
-                        title='login'
+                        title={loginScreen ? 'login' : 'signUp'}
                         onpress={loginHandler}
                         backgroundColor='#2F2F31'
                         IconShow={false}
@@ -85,12 +120,29 @@ const login = () => {
                 </View>
                 <View
                     style={{
-                        borderWidth: 1,
                         marginVertical: 10,
-                        alignItems: 'flex-end',
+                        // alignItems: 'flex-end',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        paddingHorizontal: 10,
+                        flexDirection: 'row',
                     }}
                 >
-                    <Text>already account</Text>
+                    <Text style={styles.accountTitle}>
+                        {loginScreen
+                            ? "Dont't have an account?"
+                            : 'Already have an account?'}
+                    </Text>
+                    <TouchableOpacity onPress={switchScreenHandler}>
+                        <Text
+                            style={{
+                                fontWeight: 'bold',
+                                color: 'blue',
+                            }}
+                        >
+                            {loginScreen ? '  Signup' : 'SignIn'}
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -113,10 +165,19 @@ const styles = StyleSheet.create({
         height: hp(10),
     },
     buttonContiner: {
-        marginTop: 20,
+        marginTop: 15,
     },
     title: {
         fontSize: hp(8),
         fontWeight: 'bold',
+    },
+    imageStyle: {
+        width: 200,
+        aspectRatio: 1,
+        alignSelf: 'center',
+    },
+    accountTitle: {
+        fontWeight: '300',
+        color: 'gray',
     },
 });

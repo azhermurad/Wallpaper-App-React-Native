@@ -13,10 +13,10 @@ export const FILTERDATA = [
         title: 'Size',
         data: ['large', 'medium', 'small'],
     },
-    {
-        title: 'Colors',
-        data: [],
-    },
+    // {
+    //     title: 'Colors',
+    //     data: [],
+    // },
 ];
 
 export const FILTERCOLORS = [

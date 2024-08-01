@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#FFFFFF',
-        fontSize: hp(3),
+        fontSize: hp(2),
         fontWeight: 'bold',
         marginRight: 10,
         textTransform: 'capitalize',

@@ -11,13 +11,13 @@ interface InputFieldProps {
     iconName: string;
     placeholder: string;
     value: string;
-    secureTextEntry: boolean;
+    secureTextEntry?: boolean;
     valueHandler(value: string, name: string): void;
 }
 
 const icons: any = {
-    email: <Fontisto name='email' size={25} color='#ccc' />,
-    lock: <Feather name='lock' size={24} color='#ccc' />,
+    email: <Fontisto name='email' size={20} color='#ccc' />,
+    lock: <Feather name='lock' size={20} color='#ccc' />,
 };
 const InputField = (
     {
@@ -41,7 +41,7 @@ const InputField = (
                     value={value}
                     ref={ref}
                     placeholder={placeholder}
-                    style={styles.email}
+                    style={styles.input}
                     secureTextEntry={secureTextEntry}
                 />
             </View>
@@ -59,11 +59,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        padding: 15,
+        padding: 10,
         borderColor: '#ccc',
         borderRadius: 10,
+        backgroundColor: '#f5f5f5',
     },
-    email: {
+    input: {
         paddingHorizontal: 10,
         flex: 1,
     },

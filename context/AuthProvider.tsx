@@ -1,4 +1,4 @@
-import {
+import React, {
     useContext,
     createContext,
     type PropsWithChildren,
@@ -21,7 +21,7 @@ interface singUpData {
 
 interface AuthcontexTypes {
     isLoading: boolean;
-    isAuthanticated: boolean;
+    isAuthanticated: null | boolean;
     signIn(data: Partial<singUpData>): void;
     signUp(data: singUpData): void;
     signOut(): void;
@@ -41,36 +41,32 @@ export const useAuth = () => {
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [session, setSession] = useState<string | null>(null);
     const [error, setError] = useState(null);
-    const [isAuthanticated, setIsAuthanticated] = useState<boolean>(false);
+    const [isAuthanticated, setIsAuthanticated] = useState<boolean | null>(
+        null
+    );
 
     const signIn = async (data: Partial<singUpData>) => {
         try {
+            setIsLoading(true);
             const user = await signInWithEmailAndPassword(
                 auth,
                 data.email as string,
                 data.password as string
             );
-            console.log(user.user.uid);
 
-            // const userData = {
-            //     email: user.user.email,
-            //     name: 'azher ali',
-            //     image: '',
-            //     userid: user.user.uid,
-            // };
-            // const userCollection = doc(db, 'users', user.user.uid);
-            // await setDoc(userCollection, userData);
+            setIsLoading(false);
         } catch (error: any) {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorMessage);
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, (user) => {
+            console.log(user?.email, 'onauth function is calling');
             if (user) {
                 setIsAuthanticated(true);
             } else {
@@ -82,23 +78,35 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signUp = async (data: singUpData) => {
         try {
+            setIsLoading(true);
             const user = await createUserWithEmailAndPassword(
                 auth,
                 data.email,
                 data.password
             );
-            await setDoc(doc(db, 'users', user.user.uid), data);
+            const userData = {
+                email: user.user.email,
+                name: data.name,
+                image: 'imageurl',
+                userid: user.user.uid,
+            };
+            const userCollection = doc(db, 'users', user.user.uid);
+            await setDoc(userCollection, userData);
+            setIsLoading(false);
         } catch (error: any) {
             const errorCode = error.code;
             const errorMessage = error.message;
+
             console.log(errorMessage);
+            setIsLoading(false);
         }
     };
 
+    console.log(isAuthanticated);
     return (
         <AuthContext.Provider
             value={{
-                isLoading: false,
+                isLoading,
                 signIn,
                 signUp,
                 isAuthanticated,

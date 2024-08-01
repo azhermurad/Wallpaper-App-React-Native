@@ -24,7 +24,7 @@ const BottomSheetModel: React.FC<IProps> = ({
     filterHandler,
 }) => {
     // variables
-    const snapPoints = useMemo(() => ['75%'], []);
+    const snapPoints = useMemo(() => ['50%'], []);
 
     const animationConfigs = useBottomSheetSpringConfigs({
         damping: 80,
@@ -77,7 +77,7 @@ const BottomSheetModel: React.FC<IProps> = ({
 const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
-        padding: wp(2),
+        padding: wp(3),
     },
     title: {
         fontSize: 23,

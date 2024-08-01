@@ -100,6 +100,7 @@ const FilterView: FC<IProps> = ({ filterHandler }) => {
                 }}
             >
                 <CustomButton
+                    IconShow={false}
                     backgroundColor='black'
                     title='Apply'
                     onpress={fetchFilterDataHandler}
