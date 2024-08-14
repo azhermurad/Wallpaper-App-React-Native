@@ -10,8 +10,6 @@ const IntroScreen = () => {
             }}
         >
             <Intro />
-
-            <StatusBar style='auto' />
         </View>
     );
 };

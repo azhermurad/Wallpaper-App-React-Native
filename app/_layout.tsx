@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 
 export default function Root() {
     return (
@@ -29,6 +30,7 @@ function Layout() {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
+            <StatusBar style='dark' />
             <Stack>
                 <Stack.Screen
                     name='(app)/home'
@@ -45,6 +47,7 @@ function Layout() {
                         navigationBarHidden: true,
                         navigationBarColor: 'transparent',
                         headerShown: false,
+                        statusBarTranslucent: true,
                     }}
                 />
 
@@ -62,6 +65,8 @@ function Layout() {
                     options={{
                         // Set the presentation mode to modal for our modal route.
                         headerShown: false,
+                        navigationBarHidden: true,
+                        navigationBarColor: 'transparent',
                     }}
                 />
                 <Stack.Screen

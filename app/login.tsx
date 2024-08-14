@@ -7,16 +7,23 @@ import {
     Text,
     TouchableOpacity,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Svg, { Path } from 'react-native-svg';
 import { hp } from '../util/responseUnit';
 import InputField from '../components/InputField';
 import CustomButton from '../components/ui/CustomButton';
 import { useAuth } from '../context/AuthProvider';
 import { Image } from 'expo-image';
+import Animated, {
+    FadeIn,
+    FadeInDown,
+    FadeOut,
+    SlideInLeft,
+} from 'react-native-reanimated';
 
 const login = () => {
     const [loginScreen, setLoginScreen] = useState(false);
+    const [animationTrigger, setAnimationTrigger] = useState(false);
     const [formdata, setFormData] = useState({
         name: 'test',
         email: 'azhermurad@gmail.com',
@@ -49,6 +56,19 @@ const login = () => {
             email: '',
             password: '',
         });
+        resetAnimation();
+    };
+
+    // Use effect to set the animation trigger
+    useEffect(() => {
+        // This effect will run whenever the animationTrigger changes
+        setAnimationTrigger(true);
+    }, []);
+
+    // Function to reset the animation
+    const resetAnimation = () => {
+        setAnimationTrigger(false);
+        setTimeout(() => setAnimationTrigger(true), 0); // Re-trigger the animation
     };
     return (
         <View style={styles.container}>
@@ -77,73 +97,111 @@ const login = () => {
                     padding: 10,
                 }}
             >
-                <Image
-                    style={[styles.imageStyle]}
-                    source={require('../assets/images/login.png')}
-                    contentFit='cover'
-                />
-                {!loginScreen && (
-                    <InputField
-                        name='name'
-                        valueHandler={valueHandler}
-                        value={formdata.name}
-                        iconName='users'
-                        placeholder='Enter your Name'
-                    />
-                )}
-
-                <InputField
-                    name='email'
-                    valueHandler={valueHandler}
-                    value={formdata.email}
-                    iconName='email'
-                    secureTextEntry={false}
-                    placeholder='Enter your email'
-                />
-                <InputField
-                    name='password'
-                    valueHandler={valueHandler}
-                    value={formdata.password}
-                    iconName='lock'
-                    secureTextEntry={true}
-                    placeholder='Enter your Password'
-                />
-
-                <View style={styles.buttonContiner}>
-                    <CustomButton
-                        title={loginScreen ? 'login' : 'signUp'}
-                        onpress={loginHandler}
-                        backgroundColor='#2F2F31'
-                        IconShow={false}
-                    />
-                    {/* <Button title='signup' onPress={loginHandler} /> */}
-                </View>
-                <View
-                    style={{
-                        marginVertical: 10,
-                        // alignItems: 'flex-end',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        paddingHorizontal: 10,
-                        flexDirection: 'row',
-                    }}
-                >
-                    <Text style={styles.accountTitle}>
-                        {loginScreen
-                            ? "Dont't have an account?"
-                            : 'Already have an account?'}
-                    </Text>
-                    <TouchableOpacity onPress={switchScreenHandler}>
-                        <Text
-                            style={{
-                                fontWeight: 'bold',
-                                color: 'blue',
-                            }}
+                {animationTrigger && (
+                    <>
+                        <Animated.View
+                            entering={SlideInLeft.springify()
+                                .damping(30)
+                                .delay(20)}
                         >
-                            {loginScreen ? '  Signup' : 'SignIn'}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                            <Image
+                                style={[styles.imageStyle]}
+                                source={require('../assets/images/login.png')}
+                                contentFit='cover'
+                            />
+                        </Animated.View>
+                        {!loginScreen && (
+                            <Animated.View
+                                entering={FadeInDown.springify()
+                                    .damping(30)
+                                    .delay(50)}
+                            >
+                                <InputField
+                                    name='name'
+                                    valueHandler={valueHandler}
+                                    value={formdata.name}
+                                    iconName='users'
+                                    placeholder='Enter your Name'
+                                />
+                            </Animated.View>
+                        )}
+                        <Animated.View
+                            entering={FadeInDown.springify()
+                                .damping(30)
+                                .delay(100)}
+                        >
+                            <InputField
+                                name='email'
+                                valueHandler={valueHandler}
+                                value={formdata.email}
+                                iconName='email'
+                                secureTextEntry={false}
+                                placeholder='Enter your email'
+                            />
+                        </Animated.View>
+                        <Animated.View
+                            entering={FadeInDown.springify()
+                                .damping(30)
+                                .delay(150)}
+                        >
+                            <InputField
+                                name='password'
+                                valueHandler={valueHandler}
+                                value={formdata.password}
+                                iconName='lock'
+                                secureTextEntry={true}
+                                placeholder='Enter your Password'
+                            />
+                        </Animated.View>
+
+                        <Animated.View
+                            entering={FadeInDown.springify()
+                                .damping(30)
+                                .delay(200)}
+                            style={styles.buttonContiner}
+                        >
+                            <CustomButton
+                                title={loginScreen ? 'login' : 'signUp'}
+                                onpress={loginHandler}
+                                backgroundColor='#2F2F31'
+                                IconShow={false}
+                            />
+                            {/* <Button title='signup' onPress={loginHandler} /> */}
+                        </Animated.View>
+                        <Animated.View
+                            entering={FadeInDown.springify()
+                                .damping(30)
+                                .delay(250)}
+                        >
+                            <View
+                                style={{
+                                    marginVertical: 10,
+                                    // alignItems: 'flex-end',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-end',
+                                    paddingHorizontal: 10,
+                                    flexDirection: 'row',
+                                }}
+                            >
+                                <Text style={styles.accountTitle}>
+                                    {loginScreen
+                                        ? "Dont't have an account?"
+                                        : 'Already have an account?'}
+                                </Text>
+                                <TouchableOpacity onPress={switchScreenHandler}>
+                                    <Text
+                                        style={{
+                                            fontWeight: 'bold',
+                                            color: 'blue',
+                                        }}
+                                    >
+                                        {loginScreen ? '  Signup' : ' Login'}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </Animated.View>
+                    </>
+                )}
             </View>
         </View>
     );
